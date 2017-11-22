@@ -34,10 +34,7 @@
 		public function login($username,$password) {
 			$f3=Base::instance();						
 			$db = $this->controller->db;
-			$loginsql = $db->pdo->prepare("SELECT * FROM `users` WHERE `username`=':name' AND `password`=':passwd'");
-			$loginsql->bindParam(':name',$username);
-			$loginsql->bindParam(':passwd',$password);
-			$results = $db->query($loginsql);
+			$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?",array(1=>$username,2=>$password));
 			if (!empty($results)) {		
 				$user = $results[0];	
 				$this->setupSession($user);
