@@ -34,7 +34,10 @@
 		public function login($username,$password) {
 			$f3=Base::instance();						
 			$db = $this->controller->db;
-			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
+			$loginsql = $db->prepare("SELECT * FROM `users` WHERE `username`=':name' AND `password`=':passwd'");
+			$loginsql->bindParam(':name',$username);
+			$loginsql->bindParam(':passwd',$password);
+			$results = $db->query($loginsql);
 			if (!empty($results)) {		
 				$user = $results[0];	
 				$this->setupSession($user);
