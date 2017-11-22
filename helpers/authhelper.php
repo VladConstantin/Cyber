@@ -34,7 +34,7 @@
 		public function login($username,$password) {
 			$f3=Base::instance();						
 			$db = $this->controller->db;
-			$loginsql = $db->prepare("SELECT * FROM `users` WHERE `username`=':name' AND `password`=':passwd'");
+			$loginsql = $db->pdo->prepare("SELECT * FROM `users` WHERE `username`=':name' AND `password`=':passwd'");
 			$loginsql->bindParam(':name',$username);
 			$loginsql->bindParam(':passwd',$password);
 			$results = $db->query($loginsql);
