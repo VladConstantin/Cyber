@@ -34,6 +34,7 @@
 		public function login($username,$password) {
 			$f3=Base::instance();						
 			$db = $this->controller->db;
+			/** Add parameterized SQL to avoid SQL injection */
 			$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?",array(1=>$username,2=>$password));
 			if (!empty($results)) {		
 				$user = $results[0];	
