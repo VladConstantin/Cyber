@@ -4,11 +4,12 @@ class Request {
 
 	public function __construct() {
 		$this->type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'get';
-		/** Not working yet */
+		$this->data=$_POST;
+		/** Not working yet
 		foreach ($_POST as $name=>$value) {
 			if is_string($name) {htmlspecialchars($name);}
-		}
-		$this->data=$_POST;
+		}*/
+
 	}
 
 	public function is($type) {
