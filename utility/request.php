@@ -4,6 +4,7 @@ class Request {
 
 	public function __construct() {
 		$this->type = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'get';
+		/* 	$this->data = $_POST; */
 		/** check and validate each input from the user before pass them into the database */
 		$verified = array();
 		foreach ($_POST as $name=>$value) {
