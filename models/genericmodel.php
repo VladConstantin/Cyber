@@ -116,7 +116,6 @@ class GenericModel extends \DB\SQL\Mapper {
 					$value = str_replace('/','',$value);
 					$value = str_replace("'",'',$value);
 					$value = htmlspecialchars($value);
-					StatusMessage::add('Registration complete, your username is '.$value,'success');
 					$results[$key] = $value;
 				}
 			}
@@ -129,7 +128,6 @@ class GenericModel extends \DB\SQL\Mapper {
 				$text = str_replace('>','',$text);
 				$text = str_replace('/','',$text);
 				$text = str_replace("'",'',$text);
-				StatusMessage::add('Registration complete, your username is '.$text,'success');
 				$text = htmlspecialchars($text);
 				}
 			return $text;
