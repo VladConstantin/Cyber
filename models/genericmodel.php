@@ -100,6 +100,42 @@ class GenericModel extends \DB\SQL\Mapper {
 		}
 		return $conditions;
 	}
+	/** Validation function for user input */
+	public function validateinp($text,$func=NULL) {
+		if (is_string($text))
+			$text=\Base::instance()->get($text);
+		if ($func)
+			$text=call_user_func($func,$text);
+		if (is_array($text)) { 
+			$results = array();
+			foreach ($text as $key=>$value) {
+				if (is_string($value)) {
+					$value = stripslashes($value);
+					$value = str_replace('<','',$value);
+					$value = str_replace('>','',$value);
+					$value = str_replace('/','',$value);
+					$value = str_replace("'",'',$value);
+					$value = htmlspecialchars($value);
+					StatusMessage::add('Registration complete, your username is '.$value,'success');
+					$results[$key] = $value;
+				}
+			}
+			return $results;
+		}
+		elseif (!empty($text)) {
+			if (is_string($text)) {
+				$text = stripslashes($text);
+				$text = str_replace('<','',$text);
+				$text = str_replace('>','',$text);
+				$text = str_replace('/','',$text);
+				$text = str_replace("'",'',$text);
+				StatusMessage::add('Registration complete, your username is '.$text,'success');
+				$text = htmlspecialchars($text);
+				}
+			return $text;
+		}
+		else { return $text; }
+	}
 
 }
 
