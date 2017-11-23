@@ -23,7 +23,8 @@ class User extends Controller {
 				StatusMessage::add('Passwords must match','danger');
 			} else {
 				$user = $this->Model->Users;
-				$user->copyfrom('POST');
+				/* validation step added */
+				$user->copyfrom($user->validateinp('POST'));
 				$user->created = mydate();
 				$user->bio = '';
 				$user->level = 1;
