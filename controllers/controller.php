@@ -1,7 +1,7 @@
 <?php
 
 class Controller {
-
+/**/
 	protected $layout = 'default';
   /**/
 	public function __construct() {
