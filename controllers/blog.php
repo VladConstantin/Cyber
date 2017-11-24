@@ -1,6 +1,6 @@
 <?php
 class Blog extends Controller {
-	/**/
+	
 	public function index($f3) {
 		if ($f3->exists('PARAMS.3')) {
 			$categoryid = $f3->get('PARAMS.3');
