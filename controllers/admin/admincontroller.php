@@ -20,17 +20,15 @@ class AdminController extends \Controller {
 		$access = $this->Auth->user('level');
 
 		//No access if not logged in
-		/*if(empty($access)) {
+		if(empty($access)) {
 			\StatusMessage::add('Access Denied','danger');
 			return $f3->reroute('/');
-		}*/
-		//Trying to verify if has access to Pages
-		if($access == 1){
+		}
+
+		//Check if user has level 2 - preventive mesure for unwanted guests
+		if($access < 2){
 			\StatusMessage::add('Access Denied','danger');
-			return $f3->reroute('/home');
-		}elseif (empty($accsess)) {
-			\StatusMessage::add('Access Denied','danger');
-			return $f3->reroute('/home');
+			return $f3->reroute('/');
 		}
 	}
 
