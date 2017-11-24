@@ -3,7 +3,7 @@
 class Controller {
 
 	protected $layout = 'default';
-
+  /**/
 	public function __construct() {
 		$f3=Base::instance();
 		$this->f3 = $f3;
