@@ -35,7 +35,7 @@ class User extends Controller {
 				//Set the users password
 				$user->setPassword($user->password);
 
-				$user->save();	
+				$user->save();
 				StatusMessage::add('Registration complete','success');
 				return $f3->reroute('/user/login');
 			}
@@ -61,7 +61,7 @@ class User extends Controller {
 			} else {
 				StatusMessage::add('Invalid username or password','danger');
 			}
-		}		
+		}
 	}
 
 	/* Handle after logging in */
@@ -72,38 +72,65 @@ class User extends Controller {
 				if(isset($_GET['from'])) {
 					$f3->reroute($_GET['from']);
 				} else {
-					$f3->reroute('/');	
+					$f3->reroute('/');
 				}
 	}
 
 	public function logout($f3) {
 		$this->Auth->logout();
 		StatusMessage::add('Logged out succesfully','success');
-		$f3->reroute('/');	
+		$f3->reroute('/');
 	}
 
 
-	public function profile($f3) {	
+	public function profile($f3) {
 		$id = $this->Auth->user('id');
 		extract($this->request->data);
 		$u = $this->Model->Users->fetch($id);
 		$oldpass = $u->password;
 		if($this->request->is('post')) {
-			$u->copyfrom('POST');
+			/* Added validation for user input */
+			$u->copyfrom($u->validateinp('POST'));
 			if(empty($u->password)) { $u->password = $oldpass; }
 
 			//Handle avatar upload
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
+
+			$uploadAllowed = 1;
+
+			//checks the mime type
+			$fileType = $_FILES['avatar']['type'];
+			$mimes = array('jpg|jpeg' => 'image/jpeg' , 'png' => 'image/png');
+			if(!in_array($fileType, $mimes)){
+				$uploadAllowed=0;
+				\StatusMessage::add('Only files of type jpg, jpeg or png are allowed.','danger');
+			}
+
+			//checks the file extension
+			if($uploadAllowed==1){
+				$filePath = $_FILES['avatar']['name'];
+				$fileExt = pathinfo($filePath , PATHINFO_EXTENSION);
+				if($fileExt != "jpg" && $fileExt != "jpeg" && $fileExt != "png"){
+					 $uploadAllowed = 0;
+					 \StatusMessage::add(".$fileExt files are not allowed. Only files with the extension .jpg, .jpeg or .png are allowed.",'danger');
+				}
+			}
+
+			if($uploadAllowed==1){
 				$url = File::Upload($_FILES['avatar']);
 				$u->avatar = $url;
+				\StatusMessage::add('Profile updated successfully','success');
+			}
+
 			} else if(isset($reset)) {
 				$u->avatar = '';
+				\StatusMessage::add('Profile updated successfully','success');
 			}
 
 			$u->save();
-			\StatusMessage::add('Profile updated succesfully','success');
 			return $f3->reroute('/user/profile');
-		}			
+		}
+
 		$_POST = $u->cast();
 		$f3->set('u',$u);
 	}

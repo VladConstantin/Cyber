@@ -15,12 +15,18 @@ class AdminController extends \Controller {
 
 	public function beforeRoute($f3) {
 		parent::beforeRoute($f3);
-		
+
 		//Check access of user
 		$access = $this->Auth->user('level');
 
 		//No access if not logged in
 		if(empty($access)) {
+			\StatusMessage::add('Access Denied','danger');
+			return $f3->reroute('/');
+		}
+
+		//Check if user has level 2 - preventive mesure for unwanted guests
+		if($access < 2){
 			\StatusMessage::add('Access Denied','danger');
 			return $f3->reroute('/');
 		}
