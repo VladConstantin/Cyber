@@ -96,31 +96,41 @@ class User extends Controller {
 			//Handle avatar upload
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
 
-			$uploadAllowed = 1;
+				$uploadAllowed = 1;
 
-			//checks the mime type
-			$fileType = $_FILES['avatar']['type'];
-			$mimes = array('jpg|jpeg' => 'image/jpeg' , 'png' => 'image/png');
-			if(!in_array($fileType, $mimes)){
-				$uploadAllowed=0;
-				\StatusMessage::add('Only files of type jpg, jpeg or png are allowed.','danger');
-			}
-
-			//checks the file extension
-			if($uploadAllowed==1){
-				$filePath = $_FILES['avatar']['name'];
-				$fileExt = pathinfo($filePath , PATHINFO_EXTENSION);
-				if($fileExt != "jpg" && $fileExt != "jpeg" && $fileExt != "png"){
-					 $uploadAllowed = 0;
-					 \StatusMessage::add(".$fileExt files are not allowed. Only files with the extension .jpg, .jpeg or .png are allowed.",'danger');
+				//checks the mime type
+				$fileType = $_FILES['avatar']['type'];
+				$mimes = array('jpg|jpeg' => 'image/jpeg' , 'png' => 'image/png');
+				if(!in_array($fileType, $mimes)){
+					$uploadAllowed=0;
+					\StatusMessage::add('Only files of type jpg, jpeg or png are allowed.','danger');
 				}
-			}
 
-			if($uploadAllowed==1){
-				$url = File::Upload($_FILES['avatar']);
-				$u->avatar = $url;
-				\StatusMessage::add('Profile updated successfully','success');
-			}
+				//checks the file extension
+				if($uploadAllowed==1){
+					$filePath = $_FILES['avatar']['name'];
+					$fileExt = pathinfo($filePath , PATHINFO_EXTENSION);
+					if($fileExt != "jpg" && $fileExt != "jpeg" && $fileExt != "png"){
+					 	$uploadAllowed = 0;
+					 	\StatusMessage::add(".$fileExt files are not allowed. Only files with the extension .jpg, .jpeg or .png are allowed.",'danger');
+					}
+				}
+
+				//checks for double file extension
+				if($uploadAllowed==1){
+					$fileName = pathinfo($_FILES['avatar']['name'], PATHINFO_BASENAME);
+					$fileArray = explode(".", $fileName);
+					if(count($fileArray) !== 2){
+						$uploadAllowed = 0;
+						\StatusMessage::add("No periods are allowed in the file name.",'danger');
+					}
+				}
+
+				if($uploadAllowed==1){
+					$url = File::Upload($_FILES['avatar']);
+					$u->avatar = $url;
+					\StatusMessage::add('Profile updated successfully','success');
+				}
 
 			} else if(isset($reset)) {
 				$u->avatar = '';
