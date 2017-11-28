@@ -9,9 +9,9 @@
 
 		/** Attempt to resume a previously logged in session if one exists */
 		public function resume() {
-			$f3=Base::instance();				
+			$f3=Base::instance();
 
-			//Ignore if already running session	
+			//Ignore if already running session
 			if($f3->exists('SESSION.user.id')) return;
 
 			//Log user back in from cookie
@@ -19,7 +19,21 @@
 				$user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
 				$this->forceLogin($user);
 			}
-		}		
+		}
+
+		public function getToken() {
+      $token = bin2hex(openssl_random_pseudo_bytes(16));
+      $_SESSION['token'] = $token;
+      return $token;
+    }
+
+		//Check the CSRF token
+    public function csrfDetect() {
+      $valid =($_GET['token'] == $_SESSION['token']);
+      $_SESSION['token'] = null;
+			if(!$valid) \StatusMessage::add('CSRF detected', 'danger');
+      return ($valid);
+    }
 
 		/** Perform any checks before starting login */
 		public function checkLogin($username,$password,$request,$debug) {
@@ -27,26 +41,26 @@
 			//DO NOT check login when in debug mode
 			if($debug == 1) { return true; }
 
-			return true;	
+			return true;
 		}
 
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
-			$f3=Base::instance();						
+			$f3=Base::instance();
 			$db = $this->controller->db;
 			/** Add parameterized SQL to avoid SQL injection */
 			$results = $db->query("SELECT * FROM `users` WHERE `username`=? AND `password`=?",array(1=>$username,2=>$password));
-			if (!empty($results)) {		
-				$user = $results[0];	
+			if (!empty($results)) {
+				$user = $results[0];
 				$this->setupSession($user);
 				return $this->forceLogin($user);
-			} 
+			}
 			return false;
 		}
 
 		/** Log user out of system */
 		public function logout() {
-			$f3=Base::instance();							
+			$f3=Base::instance();
 
 			//Kill the session
 			session_destroy();
@@ -107,13 +121,13 @@
 			}
 
 			//Log in as new user
-			return $this->forceLogin($user);			
+			return $this->forceLogin($user);
 		}
 
 		/** Force a user to log in and set up their details */
 		public function forceLogin($user) {
 			//YOU ARE NOT ALLOWED TO CHANGE THIS FUNCTION
-			$f3=Base::instance();					
+			$f3=Base::instance();
 
 			if(is_object($user)) { $user = $user->cast(); }
 
