@@ -15,9 +15,19 @@
 			if($f3->exists('SESSION.user.id')) return;
 
 			//Log user back in from cookie
-			if($f3->exists('COOKIE.RobPress_User')) {
+			/*if($f3->exists('COOKIE.RobPress_User')) {
 				$user = unserialize(base64_decode($f3->get('COOKIE.RobPress_User')));
 				$this->forceLogin($user);
+			}*/
+			if($f3->exists('COOKIE.RobPress_User')) {
+				$token = $f3->get('COOKIE.RobPress_User');
+				StatusMessage::add($token,'success');
+				$user = $this->controller->Model->Users->fetch(array('token' => $token));
+				StatusMessage::add($user, 'danger');
+				if(is_object($user)) {
+					$this->setupSession($user);
+					return $this->forceLogin($user);
+				}
 			}
 		}
 
@@ -76,11 +86,22 @@
 			session_destroy();
 
 			//Setup new session
-			session_id(md5($user['id']));
+			//session_id(md5($user['id']));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User',base64_encode(serialize($user)),time()+3600*24*30,'/');
+			//setcookie('RobPress_User',base64_encode(serialize($user)),time()+3600*24*30,'/');
 
+			session_start();
+			session_regenerate_id(true);
+
+			//Generate a random token to use for relogging in instead of storing the user details
+			if(is_object($user)) {
+				$token = bin2hex(openssl_random_pseudo_bytes(16));
+				$user->token = $token;
+				$user->save();
+				setcookie('RobPress_User',$token,time()+3600*24*30,'/');
+			}
+			
 			//And begin!
 			new Session();
 		}

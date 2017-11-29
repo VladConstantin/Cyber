@@ -2,13 +2,14 @@
 
 class Form {
 
-	public function __construct() {
+	public function __construct($csrfToken) {
+		$this->token = $csrfToken;
 	}
 
 	public function start($options=array()) {
 		$action = isset($options['action']) ? $options['action'] : '';
 		$enctype = (isset($options['type']) && $options['type'] == 'file') ? 'enctype="multipart/form-data"' : ''; //Handle file uploads
-		return '<form role="form" method="post" action="'.$action.'" '.$enctype.'>';	
+		return '<form role="form" method="post" action="'.$action.'" '.$enctype.'>';
 	}
 
 	public function file($options) {
@@ -27,7 +28,7 @@ class Form {
 	}
 
 	public function select($options) {
-		$output = '<select class="form-control" id="' . $options['field'] . '" name="' . $options['field'] . '">'; 
+		$output = '<select class="form-control" id="' . $options['field'] . '" name="' . $options['field'] . '">';
 		foreach($options['items'] as $value=>$label) {
 			$checked = ($options['value'] == $value) ? 'selected="selected"' : '';
 			$output .= '<option value="'.$value.'" '.$checked.'>'.$label.'</option>';
@@ -38,7 +39,7 @@ class Form {
 
 
 	public function checkboxes($options) {
-		$output = '';	
+		$output = '';
 		foreach($options['items'] as $value=>$label) {
 			$checked = (is_array($options['value']) && in_array($value,$options['value'])) ? 'checked="checked"' : '';
 			$output .= '
@@ -120,11 +121,11 @@ toolbarGroups: [
 		$result = <<<EOT
 <div class="form-group">
 <label for="$field">$label</label>
-$input 
-</div>	
+$input
+</div>
 EOT;
 		return $result;
-	}	
+	}
 
 }
 
