@@ -21,9 +21,7 @@
 			}*/
 			if($f3->exists('COOKIE.RobPress_User')) {
 				$token = $f3->get('COOKIE.RobPress_User');
-				StatusMessage::add($token,'success');
 				$user = $this->controller->Model->Users->fetch(array('token' => $token));
-				StatusMessage::add($user, 'danger');
 				if(is_object($user)) {
 					$this->setupSession($user);
 					return $this->forceLogin($user);
@@ -101,7 +99,7 @@
 				$user->save();
 				setcookie('RobPress_User',$token,time()+3600*24*30,'/');
 			}
-			
+
 			//And begin!
 			new Session();
 		}
