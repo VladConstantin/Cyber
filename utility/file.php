@@ -9,17 +9,15 @@ class File {
 		$allow_upload = 1;
 
 		//checks the mime type
-		$fileType = $array['type'];
 		$mimes = array('jpg|jpeg' => 'image/jpeg' , 'png' => 'image/png');
-		if(!in_array($fileType, $mimes)){
+		if(!in_array($type, $mimes)){
 			$allow_upload=0;
 			\StatusMessage::add('Only files of type jpg, jpeg or png are allowed.','danger');
 		}
 
 		//checks the file extension
 		if($allow_upload==1){
-			$filePath = $array['name'];
-			$fileExt = pathinfo($filePath , PATHINFO_EXTENSION);
+			$fileExt = pathinfo($name, PATHINFO_EXTENSION);
 			if($fileExt != "jpg" && $fileExt != "jpeg" && $fileExt != "png"){
 				 $allow_upload = 0;
 				 \StatusMessage::add(".$fileExt files are not allowed. Only files with the extension .jpg, .jpeg or .png are allowed.",'danger');
@@ -28,7 +26,7 @@ class File {
 
 		//checks for double file extension
 		if($allow_upload==1){
-			$fileName = pathinfo($array['name'], PATHINFO_BASENAME);
+			$fileName = pathinfo($name, PATHINFO_BASENAME);
 			$fileArray = explode(".", $fileName);
 			if(count($fileArray) !== 2){
 				$allow_upload = 0;
