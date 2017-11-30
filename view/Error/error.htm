@@ -2,15 +2,6 @@
 
 <div class="alert alert-danger"><strong>Error</strong>: <?= $ERROR['text'] ?></div>
 
+<!-- Remove stack trace fom the user error screen to avoid internal information -->
+
 <hr/>
-
-<?if(isset($ERROR['trace']) && !empty($ERROR['trace'])):?>
-<h4>Stack Trace</h4>
-
-<div class="well">
-<ol>
-<?=$ERROR['trace']?>
-</ol>
-</div>
-
-<?endif?>

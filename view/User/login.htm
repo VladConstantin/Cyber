@@ -1,7 +1,7 @@
 
 <div class="well" style="width: 60%; margin: auto; padding: auto">
 <h2>Login</h2>
-<p>Please type your RobPress username and password to log in</p>
+<p>Please type your RobPress username and password, complete the Captcha to log in</p>
 
 <?
 	$form = new Form(); 
@@ -9,6 +9,10 @@
 	echo $form->add('username');
 	echo $form->add('password',array('type' => 'password','value' => ''));
 	echo $form->add('Login',array('type' => 'submit'));
+?>
+	<p></P>
+	<div class="g-recaptcha" data-sitekey="6Lff_ToUAAAAAMQXWSrSSxky5Wu4c6_cSV4BV1tL"; margin: auto></div>
+<?
 	echo $form->end();
 ?>
 
