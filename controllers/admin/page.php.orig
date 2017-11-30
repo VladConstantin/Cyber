@@ -15,7 +15,7 @@ class Page extends AdminController {
 			$pagename = strtolower(str_replace(" ","_",$this->request->data['title']));
 			$this->Model->Pages->create($pagename);
 		
-			\StatusMessage::add('Page created successfully','success');
+			\StatusMessage::add('Page created succesfully','success');
 			return $f3->reroute('/admin/page/edit/' . $pagename);
 		} */
 		
@@ -45,7 +45,7 @@ class Page extends AdminController {
 			$pages->content = $this->request->data['content'];
 			$pages->save();
 
-			\StatusMessage::add('Page updated successfully','success');
+			\StatusMessage::add('Page updated succesfully','success');
 			return $f3->reroute('/admin/page');
 		}
 	
@@ -63,7 +63,7 @@ class Page extends AdminController {
 			return $f3->reroute('/');
 		}
 		$this->Model->Pages->delete($pagename);	
-		\StatusMessage::add('Page deleted successfully','success');
+		\StatusMessage::add('Page deleted succesfully','success');
 		return $f3->reroute('/admin/page');	
 	}
 

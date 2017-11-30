@@ -27,7 +27,7 @@ class User extends AdminController {
 			$u->copyfrom($u->validateinp('POST'));
 			$u->setPassword($this->request->data['password']);
 			$u->save();
-			\StatusMessage::add('User updated successfully','success');
+			\StatusMessage::add('User updated succesfully','success');
 			return $f3->reroute('/admin/user');
 		}			
 		$_POST = $u->cast();

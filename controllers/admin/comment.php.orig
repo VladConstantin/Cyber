@@ -36,7 +36,7 @@ class Comment extends AdminController {
 			/* Added validation for user input */
 			$comment->copyfrom($comment->validateinp('POST'));
 			$comment->save();
-			\StatusMessage::add('Comment updated successfully','success');
+			\StatusMessage::add('Comment updated succesfully','success');
 			return $f3->reroute('/admin/comment');
 		} 
 		$_POST = $comment;

@@ -32,7 +32,7 @@
 				$cat->erase();
 			}	
 
-			\StatusMessage::add('Post deleted successfully','success');
+			\StatusMessage::add('Post deleted succesfully','success');
 			return $f3->reroute('/admin/blog');
 		}
 
@@ -76,7 +76,7 @@
 						$link->save();
 					}
 
-					\StatusMessage::add('Post added successfully','success');
+					\StatusMessage::add('Post added succesfully','success');
 					return $f3->reroute('/admin/blog');
 				}
 			}
@@ -131,7 +131,7 @@
 					$link->save();
 				}
 
-				\StatusMessage::add('Post updated successfully','success');
+				\StatusMessage::add('Post updated succesfully','success');
 				return $f3->reroute('/admin/blog');
 			} 
 			$_POST = $post->cast();		
