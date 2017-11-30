@@ -10,6 +10,7 @@ session_save_path(getcwd() . DIRECTORY_SEPARATOR . 'tmp');
 //Check for database
 if(!$f3->get('db')) {
 	die('Unable to read database configuration. Ensure your database configuration exists and is correct');
+
 }
 
 //Check for settings 

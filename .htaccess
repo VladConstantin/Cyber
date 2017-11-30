@@ -1,0 +1,33 @@
+# Enable rewrite engine and route requests to framework
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+	RewriteRule ^(.*)$ - [E=BASE:%1]
+
+	#RewriteCond %{REQUEST_URI} \.ini$
+	#RewriteRule \.ini$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.bak$
+	#RewriteRule \.bak$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.phps$
+	#RewriteRule \.phps$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.cfg$
+	#RewriteRule \.cfg$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.log$
+	#RewriteRule \.log$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.sql$
+	#RewriteRule \.sql$ - [R=404]
+	#RewriteCond %{REQUEST_URI} \.json$
+	#RewriteRule \.json$ - [R=404]
+	
+	RewriteRule \.(js|css|ini|bak|cfg|log|sql|json|swp|patch|lock|swo|tarignore|htaccess|bash_logout|bashrc)$ - [R=404]
+	RewriteRule ^VERSION$ - [R=404]
+	RewriteRule ^CHANGELOG$ - [R=404]
+
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule .*$ %{ENV:BASE}/index.php [L,QSA]
+	RewriteRule .*$ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+</IfModule>

@@ -1,7 +1,8 @@
 <?php
 
 //Load framework
-$f3=require('lib/base.php');
+require 'vendor/autoload.php';
+$f3 = \Base::instance();
 $f3->config('config/config.cfg');
 $f3->set('AUTOLOAD','controllers/; models/; helpers/; utility/;');
 
@@ -11,6 +12,8 @@ $f3->config('config/db.cfg');
 //Load global functions
 include_once("bootstrap.php");
 include_once("functions.php");
+//Load setup
+include_once("setup.php");
 
 //Define homepage 
 $f3->route('GET /','Blog->index');

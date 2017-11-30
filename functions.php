@@ -16,7 +16,7 @@ function nicedate($timestamp=0) {
 
 /** HTML escape content */
 function h($text) {
-	return htmlspecialchars($text);
+	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
 
 /** Declare constants */

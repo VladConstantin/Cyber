@@ -2,7 +2,8 @@
 //YOU MUST NOT CHANGE THIS FILE
 
 //Load framework
-$f3=require('lib/base.php');
+require 'vendor/autoload.php';
+$f3 = \Base::instance();
 $f3->config('config/config.cfg');
 $f3->set('AUTOLOAD','controllers/; models/; helpers/; utility/;');
 
