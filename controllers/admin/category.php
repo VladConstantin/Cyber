@@ -19,7 +19,7 @@
 				$category = $this->Model->Categories;
 				$category->title = $this->request->data['title'];
 				$category->save();
-
+					//aici
 				\StatusMessage::add('Category added succesfully','success');
 				return $f3->reroute('/admin/category');
 			}
@@ -30,10 +30,10 @@
 			$category = $this->Model->Categories->fetchById($categoryid);
 			$category->erase();
 
-			//Delete links		
+			//Delete links
 			$links = $this->Model->Post_Categories->fetchAll(array('category_id' => $categoryid));
-			foreach($links as $link) { $link->erase(); } 
-	
+			foreach($links as $link) { $link->erase(); }
+
 			\StatusMessage::add('Category deleted succesfully','success');
 			return $f3->reroute('/admin/category');
 		}
