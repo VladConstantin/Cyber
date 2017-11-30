@@ -37,13 +37,17 @@ class Controller {
 		$this->Settings = $settings;
 		$f3->set('site',$settings);
 
+		//Enable backwards compatability
+		if($f3->get('PARAMS.*')) { $f3->set('PARAMS.3',$f3->get('PARAMS.*')); }
+
 		//Extract request data
 		extract($this->request->data);
 
+		//This is unnecessary and a potential risk
 		//Process before route code
-		if(isset($beforeCode)) {
-			Settings::process($beforeCode);
-		}
+		//if(isset($beforeCode)) {
+		//	Settings::process($beforeCode);
+		//}
 	}
 
 	public function afterRoute($f3) {	
@@ -55,6 +59,10 @@ class Controller {
 
 		//Setup user
 		$f3->set('user',$this->Auth->user());
+
+		//Create a CSRF token
+		//$token = $this->Csrf->getToken();
+		//$f3->set('token', $token);
 
 		//Check for admin
 		$admin = false;
@@ -91,10 +99,11 @@ class Controller {
 		$content = View::instance()->render("$controller/$action.htm");
 		$f3->set('content',$content);
 
+		//This is unnecessary and a potential risk
 		//Process before route code
-		if(isset($afterCode)) {
-			Settings::process($afterCode);
-		}
+		//if(isset($afterCode)) {
+		//	Settings::process($afterCode);
+		//}
 
 		//Render template
 		echo View::instance()->render($this->layout . '.htm');
@@ -120,7 +129,32 @@ class Controller {
 
 		return $menu;
 	}
-
+	/** Validation function for user input */
+	public function validateinp($text,$args=NULL) {
+		if (!empty($text)) {
+			if (is_string($text)) {
+				$text = preg_replace("/[^a-zA-Z0-9_]/","",$text);
+				$text = htmlspecialchars($text);
+				}
+			return $text;
+		}
+		else { return $text; }
+	}
+	/** Special validation function for comment */
+	public function validateinp2($text,$args=NULL) {
+		if (!empty($text)) {
+			if (is_string($text)) {
+				$text = str_replace('>','',$text);
+				$text = str_replace('<','',$text);
+				$text = str_replace('#','',$text);
+				$text = htmlspecialchars($text);
+				}
+			return $text;
+		}
+		else { return $text; }
+	}
+				
+				
 }
 
 ?>

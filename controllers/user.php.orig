@@ -1,5 +1,4 @@
 <?php
-
 class User extends Controller {
 
 	public function view($f3) {
@@ -56,13 +55,16 @@ class User extends Controller {
 	public function login($f3) {
 		/** YOU MAY NOT CHANGE THIS FUNCTION - Make any changes in Auth->checkLogin, Auth->login and afterLogin() */
 		if ($this->request->is('post')) {
+
 			//Check for debug mode
 			$settings = $this->Model->Settings;
 			$debug = $settings->getSetting('debug');
+
 			//Either allow log in with checked and approved login, or debug mode login
 			list($username,$password) = array($this->request->data['username'],$this->request->data['password']);
-			if (($this->Auth->checkLogin($username,$password,$this->request,$debug) && ($this->Auth->login($username,$password))) ||
-					$debug && $this->Auth->debugLogin($username)) {
+			if (
+				($this->Auth->checkLogin($username,$password,$this->request,$debug) && ($this->Auth->login($username,$password))) ||
+				($debug && $this->Auth->debugLogin($username))) {
 
 					$this->afterLogin($f3);
 
@@ -138,14 +140,14 @@ class User extends Controller {
 		$_POST = $u->cast();
 		$f3->set('u',$u);
 	}
-	/* This was removed because a user should only be promoted by and admin. seems like a risk.
+
 	public function promote($f3) {
 		$id = $this->Auth->user('id');
 		$u = $this->Model->Users->fetch($id);
 		$u->level = 2;
 		$u->save();
 		return $f3->reroute('/');
-	}*/
+	}
 
 }
 ?>

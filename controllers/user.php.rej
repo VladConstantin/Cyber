@@ -1,0 +1,29 @@
+--- controllers/user.php	2017-11-07 00:00:03.000000000 +0000
++++ controllers/user.php	2017-11-29 09:20:00.655970157 +0000
+@@ -66,7 +66,7 @@
+ 
+ 	/* Handle after logging in */
+ 	private function afterLogin($f3) {
+-				StatusMessage::add('Logged in succesfully','success');
++				StatusMessage::add('Logged in successfully','success');
+ 
+ 				//Redirect to where they came from
+ 				if(isset($_GET['from'])) {
+@@ -78,7 +78,7 @@
+ 
+ 	public function logout($f3) {
+ 		$this->Auth->logout();
+-		StatusMessage::add('Logged out succesfully','success');
++		StatusMessage::add('Logged out successfully','success');
+ 		$f3->reroute('/');	
+ 	}
+ 
+@@ -101,7 +101,7 @@
+ 			}
+ 
+ 			$u->save();
+-			\StatusMessage::add('Profile updated succesfully','success');
++			\StatusMessage::add('Profile updated successfully','success');
+ 			return $f3->reroute('/user/profile');
+ 		}			
+ 		$_POST = $u->cast();

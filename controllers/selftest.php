@@ -139,7 +139,7 @@ class Selftest extends Controller {
 		//Log in as test user
 		$data = ['username' => $this->testUsername, 'password' => $this->testPassword]; 
 		$output = $this->mock->run('User/login',$data);
-		if(!preg_match("!Logged in succesfully!",$output)) {
+		if(!preg_match("!Logged in succe!",$output)) {
 			die('Unable to log in as testing user. Please ensure your login process is working correctly in debug mode.');
 		}
 	}
@@ -188,7 +188,7 @@ class Selftest extends Controller {
 
 		$fail = 0;
 		if(!preg_match("!Registration complete!",$output)) {
-			$this->errors[1] .= 'Registration form could not be submitted succesfully. ';
+			$this->errors[1] .= 'Registration form could not be submitted succes';
 			$fail = 1;
 		}
 
@@ -210,7 +210,7 @@ class Selftest extends Controller {
 
 		//Check admin login form
 		$fail = 0;
-		if(!preg_match("!Logged in succesfully!",$output)) {
+		if(!preg_match("!Logged in succes!",$output)) {
 			$this->errors[2] .= 'It was not possible to log in using admin:admin in debug mode. ';
 			$fail = 1;	
 		}
@@ -229,9 +229,22 @@ class Selftest extends Controller {
 
 		//Check normal login form
 		$fail = 0;
-		if(!preg_match("!Logged in succesfully!",$output)) {
+		if(!preg_match("!Logged in succes!",$output)) {
 			$this->errors[2] .= 'It was not possible to log in using the log in form.';
 			$fail = 1;	
+		}
+
+		//Check changing password
+		$user = $this->Model->Users->fetch(array('username' => $this->testUsername2));
+		$user->password = '';
+		$user->save();
+		$oldpassword = $user->password;
+		$user->setPassword($this->testPassword);
+		$newpassword = $user->password;
+		$user->save();
+		if(empty($newpassword) || $newpassword == $oldpassword) {
+			$this->errors[2] = 'The setPassword function to change a users password did not work correctly';
+			$fail = 1;
 		}
 
 		//Check login function
@@ -267,10 +280,19 @@ class Selftest extends Controller {
 	public function test_3() {
 		$output = $this->mock->run('User/logout');
 		$fail = 0;
-		if(!preg_match("!Logged out succesfully!",$output)) {
-			$this->errors[3] .= 'The logout function did not work correctly. ';
-			$fail = 1;
-		}
+		if(preg_match("!Logged out succes!",$output)) {
+			return !$fail;
+		} 
+		
+		//Check for CSRF protection
+		$form = $this->mock->get_form($output);
+		$output = $this->mock->run('/User/logout',$form);
+		if(preg_match("!Logged out succes!",$output)) {
+			return !$fail;
+		} 
+			
+		$this->errors[3] .= 'The logout function did not work correctly. ';
+		$fail = 1;
 
 		return !$fail;
 	}
@@ -281,7 +303,7 @@ class Selftest extends Controller {
 		$output = $this->mock->run('Admin/Blog/add',$data);
 
 		$fail = 0;
-		if(!preg_match("!Post added succesfully!",$output)) {
+		if(!preg_match("!Post added succes!",$output)) {
 			$this->errors[4] .= 'Unable to add a new post through the admin form. ';
 			$fail = 1;
 		}
@@ -313,7 +335,7 @@ class Selftest extends Controller {
 		$output = $this->mock->run('Admin/Blog/add',$data);
 
 		$fail = 0;
-		if(!preg_match("!Post added succesfully!",$output)) {
+		if(!preg_match("!Post added succes!",$output)) {
 			$this->errors[5] .= 'Unable to add a new post through the admin form. ';
 			$fail = 1;
 		}
@@ -375,21 +397,21 @@ class Selftest extends Controller {
 
 		$data = array('title' => 'Testing');
 		$output = $this->mock->run('Admin/page/add',$data);
-		if(!preg_match("!Page created succesfully!",$output)) {
+		if(!preg_match("!Page created succes!",$output)) {
 			$this->errors[7] .= 'Unable to add a page through the admin interface. ';
 			$fail = 1;			
 		}
 
 		$data = array('content' => 'This is a test');
 		$output = $this->mock->run('Admin/page/edit/testing',$data);
-		if(!preg_match("!Page updated succesfully!",$output)) {
+		if(!preg_match("!Page updated succes!",$output)) {
 			$this->errors[7] .= 'Unable to edit a page through the admin interface. ';
 			$fail = 1;			
 		}
 
 		$output = $this->mock->run('Page/display/testing');
 		if(!preg_match("!This is a test!",$output)) {
-			$this->errors[7] .= 'Page was not succesfully created with given name and content. ';
+			$this->errors[7] .= 'Page was not successfully created with given name and content. ';
 			$fail = 1;			
 		}
 
