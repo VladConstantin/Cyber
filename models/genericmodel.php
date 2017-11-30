@@ -100,6 +100,7 @@ class GenericModel extends \DB\SQL\Mapper {
 		}
 		return $conditions;
 	}
+	
 	/** Validation function for user input */
 	public function validateinp($text,$func=NULL) {
 		if (is_string($text))
@@ -109,13 +110,19 @@ class GenericModel extends \DB\SQL\Mapper {
 		if (is_array($text)) { 
 			$results = array();
 			foreach ($text as $key=>$value) {
-				if (is_string($value)) {
-					$value = stripslashes($value);
-					$value = str_replace('<','',$value);
-					$value = str_replace('>','',$value);
-					$value = str_replace('/','',$value);
-					$value = str_replace("'",'',$value);
-					$value = htmlspecialchars($value);
+				if (is_string($value))  {
+					if (($key != 'bio')&&($key != 'message')&&($key != 'content')) {
+						$value = stripslashes($value);
+						$value = str_replace('<','',$value);
+						$value = str_replace('>','',$value);
+						$value = str_replace('/','',$value);
+						$value = str_replace("'",'',$value);
+						$value = htmlspecialchars($value);
+						$results[$key] = $value;
+					} else {
+						$results[$key] = $value;
+					}
+				} else {
 					$results[$key] = $value;
 				}
 			}

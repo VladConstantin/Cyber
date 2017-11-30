@@ -29,12 +29,10 @@ class Database {
 		$result = $this->connection->exec($sql);
 		return $result;
 	} */
-	/** Add $args as a parameter */
 	public function query($sql,$args) {
 		$result = $this->connection->exec($sql,$args);
 		return $result;
 	}
-
 }
 
 ?>
